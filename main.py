@@ -4,7 +4,7 @@ from pygame.locals import *
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 30
+fps =60
 
 screen_width = 1000
 screen_height = 1000
@@ -106,16 +106,16 @@ class World():
 
 
 worldData = [
-    [1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
 class GameState():
@@ -136,23 +136,25 @@ class GameState():
                         if mouseX >= col*tile_size and mouseX <= (col+1)*tile_size and mouseY >= row*tile_size and mouseY <= (row+1)*tile_size:
                             if worldData[row][col]==1:
                                 worldData[row][col]=0
+                                screen.fill((30,30,30))
                                 world = World(worldData)
                                 world.draw()
                             else:
                                 worldData[row][col]=1
+                                screen.fill((30,30,30))
                                 world = World(worldData)
                                 world.draw()
                                 
         pygame.display.update()
 
     def main_game(self):
-        screen.fill((0,0,0))
+        screen.fill((30,30,30))
         player.update()
         world = World(worldData)
         world.draw()
         key = pygame.key.get_pressed()
         if key[pygame.K_BACKSPACE]:
-            screen.fill((0,0,0))
+            screen.fill((30,30,30))
             world.draw()
             self.state = 'intro'
         pygame.display.update()
@@ -164,6 +166,7 @@ class GameState():
             self.main_game()
 
 game_state = GameState()
+screen.fill((30,30,30))
 player = Player(200, screen_height-100)
 world = World(worldData)
 world.draw()
@@ -171,7 +174,7 @@ temp = True
 run = True
 while run:
     clock.tick(fps)
-    # print(clock.get_fps())
+    print(clock.get_fps())
     game_state.state_manager()
     if game_state.state == 'intro' and temp == True:
         temp = False
