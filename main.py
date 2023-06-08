@@ -10,6 +10,7 @@ clock = pygame.time.Clock()
 fps = 30
 screen_width = 1000
 screen_height = 1000
+
 tile_size = 100
 worldData = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -32,14 +33,12 @@ dirtImg = pygame.image.load('images/dirt.png')
 playerImg = pygame.image.load('images/player.png')
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('igra')
-pygame.display.set_icon(playerImg)
+pygame.display.set_caption('igra nz')
 
 
 def drawGrid():
     for line in range(1, 10):
         pygame.draw.line(screen, (255, 255, 255), (tile_size, line * tile_size), (screen_width-tile_size, line * tile_size))
-
         pygame.draw.line(screen, (255, 255, 255), (line * tile_size, tile_size), (line * tile_size, screen_height-tile_size))
 
 
@@ -60,13 +59,16 @@ class Player():
         dy = 0
 
         key = pygame.key.get_pressed()
-        if key[pygame.K_w] and self.jumped is False:
+        if key[pygame.K_w] and not self.jumped:
             self.vel_y = -33
             self.jumped = True
-        if self.vel_y == 0 and key[pygame.K_w] is False:
+
+        if self.vel_y == 0 and not key[pygame.K_w]:
             self.jumped = False
+
         if key[pygame.K_a]:
             dx -= 15
+
         if key[pygame.K_d]:
             dx += 15
 
@@ -233,21 +235,21 @@ class GameState():
                 screen.fill((30, 30, 30))
                 world.draw()
                 self.state = 'intro'
-            # renderText(clock.get_fps())
             pygame.display.update()
 
     def state_manager(self):
         if self.state == 'intro':
             self.intro()
+
         if self.state == 'main_game':
             self.main_game()
 
 
-def renderText(text):
+def renderText(text, p):
     text_surface = font.render(text, False, (255, 255, 255))
-    bg = pygame.Rect(10, 10, 460, 80)
+    bg = pygame.Rect(10, p*100+10, len(text)*22, 80)
     pygame.draw.rect(screen, (0, 0, 0), bg)
-    screen.blit(text_surface, (20, 20))
+    screen.blit(text_surface, (20, p*100+20))
 
 
 game_state = GameState()
@@ -262,14 +264,19 @@ world.draw()
 
 while run:
     clock.tick(fps)
+    print(clock.get_fps())
+
+    renderText("Blocks: " + str(blocksLeft) + " Trophies: " + str(trophyCount), 0)
+    renderText("fps: " + str(int(clock.get_fps())) + "  ", 1)
+
     game_state.state_manager()
     if game_state.state == 'intro' and temp is True:
         temp = False
+
     if game_state.state == "main_game" and temp is False:
         world = World(worldData)
         temp = True
-    print(clock.get_fps())
-    renderText("Blocks: " + str(blocksLeft) + " Trophies: " + str(trophyCount))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
