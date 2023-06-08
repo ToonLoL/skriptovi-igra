@@ -24,6 +24,7 @@ worldData = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 blocksLeft = 0
+trophyCount = 0
 
 blockImg = pygame.image.load('images/block.png')
 trophyImg = pygame.image.load('images/trophy.png')
@@ -214,6 +215,8 @@ class GameState():
                 worldData[wY][wX] = 3
             global blocksLeft
             blocksLeft = 0
+            global trophyCount
+            trophyCount += 1
             self.isTrophySpawned = True
 
             world = World(worldData)
@@ -242,7 +245,7 @@ class GameState():
 
 def renderText(text):
     text_surface = font.render(text, False, (255, 255, 255))
-    bg = pygame.Rect(10, 10, 230, 80)
+    bg = pygame.Rect(10, 10, 460, 80)
     pygame.draw.rect(screen, (0, 0, 0), bg)
     screen.blit(text_surface, (20, 20))
 
@@ -265,8 +268,8 @@ while run:
     if game_state.state == "main_game" and temp is False:
         world = World(worldData)
         temp = True
-    # renderText(str(int(clock.get_fps())))
-    renderText("Blocks: " + str(blocksLeft))
+    print(clock.get_fps())
+    renderText("Blocks: " + str(blocksLeft) + " Trophies: " + str(trophyCount))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
